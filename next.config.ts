@@ -4,8 +4,8 @@ const basePath = process.env.BASE_PATH ?? "";
 
 const nextConfig: NextConfig = {
   output: "export",
-  basePath,
-  assetPrefix: basePath || undefined,
+  basePath: "/front-page-design",
+  assetPrefix: "/front-page-design/",
   images: { unoptimized: true },
 };
 
