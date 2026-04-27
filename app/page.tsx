@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import Form from "./form";
+import Head from "next/head";
 
 
 export default function Home() {
@@ -18,10 +19,16 @@ export default function Home() {
     year: "",
   });
 
-  return (
-    <div className="min-h-screen flex flex-col lg:flex-row gap-6">
+  return (<>
+
+    <Head>
+      <link rel="preload" as="image" href="/iec-logo.jpg" />
+      <link rel="preload" as="image" href="/aktu-logo.png" />
+    </Head>
+    <div className="min-h-screen flex justify-center items-center lg:flex-row ">
       <Form formData={formData} setFormData={setFormData} />
       {/* <Preview formData={formData} /> */}
     </div>
+  </>
   );
 }

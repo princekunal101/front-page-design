@@ -109,7 +109,7 @@ export default function Form({ formData, setFormData }: FormProps) {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center p-6">
+        <div className="min-h-screen w-full bg-gray-100 flex flex-col items-center p-6">
             {/* Form */}
             {!showPreview && (<form className="w-full max-w-md bg-white p-6 rounded-lg shadow-md space-y-4">
                 <div>
