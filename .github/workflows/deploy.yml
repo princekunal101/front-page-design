@@ -3,7 +3,7 @@ name: Deploy Next.js static site
 on:
   push:
     branches:
-      - main   # trigger when pushing to main
+      - master
 
 jobs:
   build-and-deploy:
