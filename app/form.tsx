@@ -29,7 +29,7 @@ export default function Form({ formData, setFormData }: FormProps) {
 
 
     const [showPreview, setShowPreview] = useState(false);
-    const [loading, setLoadnig] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // prefix for public assets when deployed under a basePath (e.g. GitHub Pages)
     const PUBLIC_BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -76,30 +76,41 @@ export default function Form({ formData, setFormData }: FormProps) {
         return true;
     };
 
+    // Utility: wait until one image is loaded
+    const waitForImage = (src: string): Promise<HTMLImageElement> => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = src;
+
+            if (img.complete) {
+                resolve(img); // already cached
+            } else {
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+            }
+        });
+    };
+
     // for handling image loading
     const handleDownload = async () => {
-        setLoadnig(true);
-        const img1 = new Image();
-        img1.src = `${PUBLIC_BASE}/iec-logo.jpg`;
 
-        const img2 = new Image();
-        img2.src = `${PUBLIC_BASE}/aktu-logo.png`;
+        setLoading(true);
 
-        // If already cached, resolve immediately
-        if (img1.complete && img2.complete) {
+        try {
+            // Wait for both images in parallel
+            const [iecLogo, aktuLogo] = await Promise.all([
+                waitForImage("/iec-logo.jpg"),
+                waitForImage("/aktu-logo.png"),
+            ]);
+
+            // Both images are ready, now safe to generate PDF
             downloadPDF();
-            setLoadnig(false);
+
+        } catch (err) {
+            console.error("One or more images failed to load", err);
+        } finally {
+            setLoading(false);
         }
-
-        // Otherwise wait for load
-        return new Promise((resolve, reject) => {
-            img1.onload = () => resolve(img1);
-            img2.onload = () => resolve(img2);
-            img1.onerror = reject;
-            img2.onerror = reject;
-
-            setLoadnig(false);
-        });
     }
 
     const downloadPDF = async () => {
