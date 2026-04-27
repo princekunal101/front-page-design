@@ -1,10 +1,12 @@
 import type { NextConfig } from "next";
 
+const basePath = process.env.BASE_PATH || "";
+
 const nextConfig: NextConfig = {
-  /* config options here */
-  output: "export", // ensures static export
-  basePath: "", // must match your GitHub repo name
-  images: { unoptimized: true }, // disable server image optimization
+  output: "export",
+  basePath,
+  assetPrefix: basePath || undefined,
+  images: { unoptimized: true },
 };
 
 export default nextConfig;
