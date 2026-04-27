@@ -29,6 +29,10 @@ export default function Form({ formData, setFormData }: FormProps) {
 
 
     const [showPreview, setShowPreview] = useState(false);
+    const [loading, setLoadnig] = useState(false);
+
+    // prefix for public assets when deployed under a basePath (e.g. GitHub Pages)
+    const PUBLIC_BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
     // Define a mapping from short code to full name
     const departmentMap: Record<string, string> = {
@@ -71,6 +75,29 @@ export default function Form({ formData, setFormData }: FormProps) {
         }
         return true;
     };
+
+    // for handling image loading
+    const handleDownload = async () => {
+        setLoadnig(true);
+        const img1 = new Image();
+        img1.src = `${PUBLIC_BASE}/iec-logo.jpg`;
+
+        const img2 = new Image();
+        img1.src = `${PUBLIC_BASE}/iec-logo.jpg`;
+
+        // If already cached, resolve immediately
+        if (img1.complete && img2.complete) {
+            downloadPDF();
+        }
+
+        // Otherwise wait for load
+        return new Promise((resolve, reject) => {
+            img1.onload = () => resolve(img1);
+            img2.onload = () => resolve(img2);
+            img1.onerror = reject;
+            img2.onerror = reject;
+        });
+    }
 
     const downloadPDF = async () => {
         if (!isFormComplete()) {
@@ -227,10 +254,11 @@ export default function Form({ formData, setFormData }: FormProps) {
 
                 <button
                     type="submit"
-                    onClick={downloadPDF}
+                    onClick={handleDownload}
                     className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
+                    disabled={loading}
                 >
-                    Done & Download PDF
+                    {loading ? "Loading..." : "Done & Download PDF"}
                 </button>
             </form>)}
 
@@ -257,7 +285,7 @@ export default function Form({ formData, setFormData }: FormProps) {
                     <p className="text-xl font-bold font-times">{formData.department}</p>
 
                     <img
-                        src="/iec-logo.jpg"
+                        src={`${PUBLIC_BASE}/iec-logo.jpg`}
                         alt="Logo"
                         className=" m-2 w-30 h-30 object-contain"
                     />
@@ -265,7 +293,7 @@ export default function Form({ formData, setFormData }: FormProps) {
                     <p className="text-xl font-times">IEC COLLEGE OF ENGINEERING & TECHNOLOGY</p>
                     <p className="text-xl font-times">GREATER NOIDA, U.P.</p>
                     <img
-                        src="/aktu-logo.png"
+                        src={`${PUBLIC_BASE}/aktu-logo.png`}
                         alt="Logo"
                         className="m-2 w-30 h-30 object-contain"
                     />
