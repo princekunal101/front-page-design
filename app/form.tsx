@@ -83,11 +83,12 @@ export default function Form({ formData, setFormData }: FormProps) {
         img1.src = `${PUBLIC_BASE}/iec-logo.jpg`;
 
         const img2 = new Image();
-        img1.src = `${PUBLIC_BASE}/iec-logo.jpg`;
+        img2.src = `${PUBLIC_BASE}/aktu-logo.png`;
 
         // If already cached, resolve immediately
         if (img1.complete && img2.complete) {
             downloadPDF();
+            setLoadnig(false);
         }
 
         // Otherwise wait for load
@@ -96,6 +97,8 @@ export default function Form({ formData, setFormData }: FormProps) {
             img2.onload = () => resolve(img2);
             img1.onerror = reject;
             img2.onerror = reject;
+
+            setLoadnig(false);
         });
     }
 
