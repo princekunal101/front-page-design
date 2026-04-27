@@ -99,8 +99,8 @@ export default function Form({ formData, setFormData }: FormProps) {
         try {
             // Wait for both images in parallel
             const [iecLogo, aktuLogo] = await Promise.all([
-                waitForImage("/iec-logo.jpg"),
-                waitForImage("/aktu-logo.png"),
+                waitForImage(`${PUBLIC_BASE}/iec-logo.jpg`),
+                waitForImage(`${PUBLIC_BASE}/aktu-logo.png`),
             ]);
 
             // Both images are ready, now safe to generate PDF
