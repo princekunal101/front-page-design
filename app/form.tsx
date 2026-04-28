@@ -150,9 +150,9 @@ export default function Form({ formData, setFormData }: FormProps) {
     };
 
     return (
-        <div className="min-h-screen w-full bg-gray-100 flex flex-col items-center p-6">
+        <div className="min-h-screen w-full bg-gray-100 dark:bg-gray-900 flex flex-col items-center p-6">
             {/* Form */}
-            {!showPreview && (<form className="w-full max-w-md bg-white p-6 rounded-lg shadow-md space-y-4">
+            {!showPreview && (<form className="w-full max-w-md bg-white dark:bg-zinc-700 p-6 rounded-lg shadow-md space-y-4">
                 <div>
                     <label className="block text-sm font-medium">Project Name (only for IEC)</label>
                     <input
@@ -160,25 +160,31 @@ export default function Form({ formData, setFormData }: FormProps) {
                         name="projectName"
                         value={formData.projectName}
                         onChange={handleChange}
+                        placeholder="The Project Name"
                         className="mt-1 w-full border rounded-md p-2"
                         required
                     />
                 </div>
-                <div className="flex gap-4 mt-2">
-                    {[1, 2, 3, 4].map((count) => (
-                        <label key={count}>
-                            <input
-                                type="radio"
-                                name="memberCount"
-                                value={count}
-                                checked={formData.memberCount === String(count)}
-                                onChange={handleChange}
-                                className="mr-1"
-                                required
-                            />
-                            {count}
-                        </label>
-                    ))}
+                <div>
+
+                    <label className="block text-sm font-medium">Choose Member Count</label>
+                    <div className="flex gap-4 mt-2">
+
+                        {[1, 2, 3, 4].map((count) => (
+                            <label key={count}>
+                                <input
+                                    type="radio"
+                                    name="memberCount"
+                                    value={count}
+                                    checked={formData.memberCount === String(count)}
+                                    onChange={handleChange}
+                                    className="mr-1"
+                                    required
+                                />
+                                {count}
+                            </label>
+                        ))}
+                    </div>
                 </div>
                 {Array.from({ length: parseInt(formData.memberCount || "1") }, (_, i) => (
                     <div key={i} className="mb-4">
@@ -192,6 +198,7 @@ export default function Form({ formData, setFormData }: FormProps) {
                                 updated[i] = { ...updated[i], name: e.target.value };
                                 setFormData({ ...formData, members: updated });
                             }}
+                            placeholder={`Student Name ${i + 1}`}
                             className="mt-1 w-full border rounded-md p-2"
                             required
                         />
@@ -206,6 +213,7 @@ export default function Form({ formData, setFormData }: FormProps) {
                                 updated[i] = { ...updated[i], rollno: e.target.value };
                                 setFormData({ ...formData, members: updated });
                             }}
+                            placeholder={`Student Rollno ${i + 1}`}
                             className="mt-1 w-full border rounded-md p-2"
                             required
                         />
@@ -246,7 +254,6 @@ export default function Form({ formData, setFormData }: FormProps) {
                                     checked={formData.department === departmentMap[dept]}
                                     onChange={handleChange}
                                     className="mr-1"
-                                    required
                                 />
                                 {dept}
                             </label>
@@ -262,7 +269,6 @@ export default function Form({ formData, setFormData }: FormProps) {
                         value={formData.monthYear}
                         onChange={handleChange}
                         className="mt-1 w-full border rounded-md p-2"
-                        required
                     />
                 </div>
 
@@ -279,7 +285,7 @@ export default function Form({ formData, setFormData }: FormProps) {
 
             {showPreview && (<div
                 id="preview"
-                className="mt-8 bg-white w-[210mm] h-[297mm] px-10 py-10 shadow-lg relative flex justify-center items-center font-times">
+                className="mt-8 bg-white w-[210mm] h-[297mm] px-10 py-10 shadow-lg relative flex justify-center items-center font-times dark:text-black">
                 <div className="flex flex-col items-center justify-between h-full gap-2">
                     <h1 className="text-3xl font-bold">{formData.projectName}</h1>
 

@@ -11,12 +11,12 @@ export default function Home() {
     projectName: "",
     memberCount: "1",
     members: [{ name: "", rollno: "" }],
-    name: "",
-    rollno: "",
-    department: "",
-    monthYear: "",
-    month: "",
-    year: "",
+    // name: "",
+    // rollno: "",
+    department: "Computer Science and Engineering",
+    monthYear: "2026-05",
+    month: "May",
+    year: "2026",
   });
 
   return (<>
