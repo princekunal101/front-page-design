@@ -2,6 +2,7 @@
 
 import { Page, Text, View, Document, StyleSheet, Font, Image } from "@react-pdf/renderer";
 
+const PUBLIC_BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 type Member = {
     name: string;
@@ -28,8 +29,8 @@ type PreViewProps = {
 Font.register({
     family: "Times New Roman",
     fonts: [
-        { src: "/fonts/TimesNewRomanRegular.ttf", fontWeight: "normal" },
-        { src: "/fonts/TimesNewRomanBold.ttf", fontWeight: "bold" },
+        { src: `${PUBLIC_BASE}/fonts/TimesNewRomanRegular.ttf`, fontWeight: "normal" },
+        { src: `${PUBLIC_BASE}/fonts/TimesNewRomanBold.ttf`, fontWeight: "bold" },
 
     ]
 });
@@ -68,13 +69,13 @@ export const MyPDF = ({ formData }: PreViewProps) => (
 
                 <Text style={styles.textBold}>{formData.department}</Text>
                 <View style={{ alignItems: "center", margin: 10 }}>
-                    <Image src="/iec-logo.jpg" style={{ width: 80, height: 80 }} />
+                    <Image src={`${PUBLIC_BASE}/iec-logo.jpg`} style={{ width: 80, height: 80 }} />
                 </View>
                 <Text style={styles.text}>IEC COLLEGE OF ENGINEERING & TECHNOLOGY</Text>
                 <Text style={styles.text}>GREATER NOIDA, U.P.</Text>
 
                 <View style={{ alignItems: "center", margin: 10 }}>
-                    <Image src="/aktu-logo.png" style={{ width: 80, margin: 10 }} />
+                    <Image src={`${PUBLIC_BASE}/aktu-logo.png`} style={{ width: 80, margin: 10 }} />
                 </View>
                 <Text style={styles.text}>DR. A. P. J. ABDUL KALAM TECHNICAL UNIVERSITY</Text>
                 <Text style={styles.text}>LUCKNOW, U.P.</Text>
