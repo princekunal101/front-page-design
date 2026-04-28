@@ -1,8 +1,14 @@
 "use client"
+
 import { useState } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import Preview from "./preview";
+import { MyPDF } from "./components/CoverPDF";
+import dynamic from "next/dynamic";
+
+
+const PDFDownloadLink = dynamic(
+  () => import("@react-pdf/renderer").then(mod => mod.PDFDownloadLink),
+  { ssr: false }
+);
 
 type Member = {
     name: string;
@@ -119,22 +125,23 @@ export default function Form({ formData, setFormData }: FormProps) {
             return;
         }
 
-        setShowPreview(true);
-        await new Promise((resolve) => setTimeout(resolve, 150));
 
-        const element = document.getElementById("preview");
-        if (!element) return;
-        const pdf = new jsPDF("p", "mm", "a4");
-        pdf.html(element, {
-            callback: (doc) => {
-                doc.save("project-front-page.pdf");
-            },
-            x: 10,
-            y: 8,
-            width: 190,       // keep within A4 width
-            windowWidth: 794, // match CSS A4 width in px
-            autoPaging: "text",
-        });
+        // setShowPreview(true);
+        // await new Promise((resolve) => setTimeout(resolve, 300));
+
+        // const element = document.getElementById("preview");
+        // if (!element) return;
+        // const pdf = new jsPDF("p", "mm", "a4");
+        // pdf.html(element, {
+        //     callback: (doc) => {
+        //         doc.save("project-front-page.pdf");
+        //     },
+        //     x: 10,
+        //     y: 8,
+        //     width: 190,       // keep within A4 width
+        //     windowWidth: 794, // match CSS A4 width in px
+        //     autoPaging: "text",
+        // });
 
         // const canvas = await html2canvas(element, { scale: 2 });
         // const imgData = canvas.toDataURL("image/png");
@@ -145,16 +152,16 @@ export default function Form({ formData, setFormData }: FormProps) {
         // pdf.save("project-front-page.pdf");
 
 
-        setShowPreview(false);
+        // setShowPreview(false);
 
     };
 
     return (
-        <div className="min-h-screen w-full bg-gray-100 dark:bg-gray-900 flex flex-col items-center p-6">
+        <div className={`min-h-screen w-full bg-gray-100 dark:bg-gray-900 flex flex-col items-center p-6`}>
             {/* Form */}
-            {!showPreview && (<form className="w-full max-w-md bg-white dark:bg-zinc-700 p-6 rounded-lg shadow-md space-y-4">
+            <form className="w-full max-w-md bg-white dark:bg-zinc-700 p-6 rounded-lg shadow-md space-y-4">
                 <div>
-                    <label className="block text-sm font-medium">Project Name (only for IEC)</label>
+                    <label className="block text-sm font-medium">Project Name (only for IECns)</label>
                     <input
                         type="text"
                         name="projectName"
@@ -220,28 +227,7 @@ export default function Form({ formData, setFormData }: FormProps) {
                     </div>
                 ))}
 
-                {/* <div>
-          <label className="block text-sm font-medium">Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="mt-1 w-full border rounded-md p-2"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium">Roll No</label>
-          <input
-            type="text"
-            name="rollno"
-            value={formData.rollno}
-            onChange={handleChange}
-            className="mt-1 w-full border rounded-md p-2"
-          />
-        </div> */}
-
+            
                 <div>
                     <label className="block text-sm font-medium">Department</label>
                     <div className="flex gap-4 mt-2">
@@ -272,37 +258,43 @@ export default function Form({ formData, setFormData }: FormProps) {
                     />
                 </div>
 
+
                 <button
                     type="submit"
                     onClick={handleDownload}
                     className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
                     disabled={loading}
                 >
-                    {loading ? "Loading..." : "Done & Download PDF"}
+                {/* Download link */}
+                <PDFDownloadLink document={<MyPDF formData={formData} />} fileName="project-front-page.pdf">
+                    {({ loading }) => (loading ? "Loading document..." : "Download PDF")}
+                </PDFDownloadLink>
                 </button>
-            </form>)}
+            </form>
 
 
-            {showPreview && (<div
+            {/* {!showPreview && (<div
                 id="preview"
-                className="mt-8 bg-white w-[210mm] h-[297mm] px-10 py-10 shadow-lg relative flex justify-center items-center font-times dark:text-black">
+                className="mt-8 bg-white w-[210mm] h-[297mm] px-10 py-10 shadow-lg relative flex justify-center items-center dark:text-black"
+                style={{ fontFamily: "var(--font-myfont)" }}
+            >
                 <div className="flex flex-col items-center justify-between h-full gap-2">
                     <h1 className="text-3xl font-bold">{formData.projectName}</h1>
 
-                    <p className="text-lg font-times">by</p>
+                    <p className="text-lg">by</p>
 
                     {formData.members.map((m, i) => (
-                        <p key={i} className="text-xl font-times">{m.name} ({m.rollno})</p>
+                        <p key={i} className="text-xl">{m.name} ({m.rollno})</p>
                     ))}
                     <div className="h-2"></div>
 
-                    <p className="text-xl font-times">Submitted to the Department of</p>
-                    <p className="text-xl font-times">{formData.department}</p>
-                    <p className="text-xl font-times">in partial fulfilment of the requirements</p>
-                    <p className="text-xl font-times">for the degree of</p>
-                    <p className="text-xl font-bold font-times">Bachlor of Technology</p>
-                    <p className="text-lg font-bold font-times">in</p>
-                    <p className="text-xl font-bold font-times">{formData.department}</p>
+                    <p className="text-xl ">Submitted to the Department of</p>
+                    <p className="text-xl ">{formData.department}</p>
+                    <p className="text-xl ">in partial fulfilment of the requirements</p>
+                    <p className="text-xl ">for the degree of</p>
+                    <p className="text-xl font-bold">Bachlor of Technology</p>
+                    <p className="text-lg font-bold">in</p>
+                    <p className="text-xl font-bold">{formData.department}</p>
 
                     <img
                         src={`${PUBLIC_BASE}/iec-logo.jpg`}
@@ -310,19 +302,19 @@ export default function Form({ formData, setFormData }: FormProps) {
                         className=" m-2 w-30 h-30 object-contain"
                     />
 
-                    <p className="text-xl font-times">IEC COLLEGE OF ENGINEERING & TECHNOLOGY</p>
-                    <p className="text-xl font-times">GREATER NOIDA, U.P.</p>
+                    <p className="text-xl">IEC COLLEGE OF ENGINEERING & TECHNOLOGY</p>
+                    <p className="text-xl">GREATER NOIDA, U.P.</p>
                     <img
                         src={`${PUBLIC_BASE}/aktu-logo.png`}
                         alt="Logo"
                         className="m-2 w-30 h-30 object-contain"
                     />
-                    <p className="text-xl font-times">DR. A. P. J. ABDUL KALAM TECHNICAL UNIVERSITY</p>
-                    <p className="text-xl font-times">LUCKNOW, U.P.</p>
-                    <p className="text-lg font-times">{formData.month}, {formData.year}</p>
+                    <p className="text-xl">DR. A. P. J. ABDUL KALAM TECHNICAL UNIVERSITY</p>
+                    <p className="text-xl">LUCKNOW, U.P.</p>
+                    <p className="text-lg">{formData.month}, {formData.year}</p>
 
                 </div>
-            </div>)}
+            </div>)} */}
 
             {/* {showPreview && <Preview formData={formData}/>} */}
         </div>);
