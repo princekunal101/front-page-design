@@ -267,7 +267,7 @@ export default function Form({ formData, setFormData }: FormProps) {
                 >
                 {/* Download link */}
                 <PDFDownloadLink document={<MyPDF formData={formData} />} fileName="project-front-page.pdf">
-                    {({ loading }) => (loading ? "Loading document..." : "Download PDF")}
+                    {({ loading }) => (loading ? "Loading..." : "Download PDF")}
                 </PDFDownloadLink>
                 </button>
             </form>
